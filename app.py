@@ -24,9 +24,15 @@ logger = logging.getLogger("automation_api")
 load_dotenv()
 
 # Load environment variables
-load_dotenv()
-
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+
+# fallback for Streamlit secrets (if using Streamlit Cloud)
+try:
+    import streamlit as st
+    GROQ_API_KEY = GROQ_API_KEY or st.secrets.get("GROQ_API_KEY")
+except Exception:
+    pass
+
 if not GROQ_API_KEY:
     raise ValueError("GROQ_API_KEY environment variable is required")
 
